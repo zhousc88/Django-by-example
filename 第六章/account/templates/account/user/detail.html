@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block title %} {{ users.username }}{% endblock %}
+{% block content %}
+    <h1>{{ users.username }}</h1>
+    <div class="text-info">
+    {% thumbnail users.profile.photo "180x180" crop="100%" as im %}
+        <img src="{{ im.url }}">
+    {% endthumbnail %}
+    </div>
+    {% with total_followers=user.followers.count %}
+    <span class="alert-info">
+    <span>{{ total_followers }}</span>
+    follower{{ total_followers|pluralize }}
+    </span>
+    <a href="#" data-id="{{ user.id }}" data-action="{%  if request.user in user.followers.all %}un{% endif %}follow"
+class="button">
+    {%  if  request.user not in user.followers.all %}
+    Follow
+    {% else %}
+    Unfollow
+    {% endif %}
+    </a>
+    <div id ='img-list' class="imget-container">
+    {% include "images/image/list_ajax.html" with images=users.images_created.all %}
+    </div>
+    {% endwith %}
+{% endblock %}

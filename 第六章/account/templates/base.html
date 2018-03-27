@@ -1,0 +1,64 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Title{% endblock %}</title>
+<link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+<!--<script src="{% static "js/bootstrap.js" %}"></script>-->
+<script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js">
+</script>
+<script src=" http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.
+cookie.min.js "></script>
+
+<script>
+var csrftoken = $.cookie("csrftoken");
+  function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+  }
+}
+});
+    $(document).ready(function () {
+        {% block domready %}
+        {% endblock %}
+    });
+</script>
+</head>
+<body>
+<div id="header" class="container-fluid"  role="navigation">
+    <span class="nav navbar-brand">Bookmarks</span>
+    {% if request.user.is_authenticated %}
+      <ul class="nav nav-tabs">
+        <li {% if section|safe == "dashboard" %} class="active" {% endif %}>
+        <a href="{% url "account:dashboard" %}">My dashboard</a>
+        </li>
+     <li {% if section|safe == "images" %}class="active"{% endif %}>
+        <a href="{% url "images:list" %}">Images</a>
+      </li>
+      <li {% if section|safe == "people" %}class="active"{% endif %}>
+        <a href="{%  url "account:user_list" %}" >People</a>
+       </li>
+     {% endif %}
+</ul>
+     <span>
+       {% if request.user.is_authenticated %}
+         Hello {{ request.user }},
+         <a href="{% url "account:logout" %}">Logout</a>
+       {% else %}
+         <a href="{% url "account:login" %}">Log-in</a>
+       {% endif %}
+     </span>
+
+</div>
+<div id="content">
+    {% block content %}
+
+    {% endblock %}
+</div>
+</body>
+</html>

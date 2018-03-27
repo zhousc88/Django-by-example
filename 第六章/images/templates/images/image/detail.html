@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% block title %}{{ image.title }}{% endblock %}
+{% block domready %}
+    $('a.like').click(function(e){
+        e.preventDefault();
+        $.post('{% url "images:like" %}',
+            {
+                id: $(this).data('id'),
+                action: $(this).data('action')
+            },
+            function(data){
+                if (data['status'] == 'ok')
+                {
+                    var previous_action = $('a.like').data('action');
+
+                    // toggle data-action
+                    $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
+                    // toggle link text
+                    $('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
+
+                    // update total likes
+                    var previous_likes = parseInt($('span.count .total').text());
+                    $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+                }
+        });
+
+    });
+{% endblock %}
+{% block content %}
+<h1>{{ image.title }}</h1>
+    {% thumbnail image.image "300" as im %}
+    <a href="{{ image.image.url }}"><img src="{{ im.url }}" class="img-rounded"></a>
+{% endthumbnail %}
+{%  with total_likes=image.user_like.count user_like=image.user_like.all %}
+<div class="images">
+    <div class="col-sm-6 col-md-3">
+        <p class="action-counter">
+            <span>{{ total_likes }}</span>Like{{ total_likes|pluralize }}
+        </p>
+   <a href="" data-id="{{ image.id }}" data-action="{% if request.user in user_like %} un{% endif %}like"
+       class="like">
+    {%  if request.user not in user_like %}LIKE{% else %}unlike{% endif %}
+    </a>
+    </div>
+    {{ image.description|linebreaks }}
+    <div class="media">
+        {%  for user in image.user_like.all %}
+        <div>
+            <img  class="media-object" src="{{ user.profile.photo.url }}" style="width: 100px;height: 100px">
+            <p  class="media-body">{{ user }}</p>
+        </div>
+        {% empty %}
+        Nobody likes this image yet
+        {% endfor %}
+    </div>
+{% endwith %}
+</div>
+{% endblock %}
