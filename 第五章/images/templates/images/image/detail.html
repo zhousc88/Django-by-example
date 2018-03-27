@@ -33,23 +33,23 @@
     {% thumbnail image.image "300" as im %}
     <a href="{{ image.image.url }}"><img src="{{ im.url }}" class="img-rounded"></a>
 {% endthumbnail %}
-{%  with total_likes=image.users_like.count user_like=image.user_like.all %}
+{%  with total_likes=image.user_like.count user_like=image.user_like.all %}
 <div class="images">
-    <div >
-        <span class="action-counter">
-            {{ total_likes }}Like{{ total_likes|pluralize }}
-        </span>
-    <a href="#" data-id="{{ image.id }}" data-action="{% if request.user in users_like %} un{% endif %}like"
-       class="bg-success">
-    {%  if request.user not in users_like %}LIKE{% else %}unlike{% endif %}
+    <div class="col-sm-6 col-md-3">
+        <p class="action-counter">
+            <span>{{ total_likes }}</span>Like{{ total_likes|pluralize }}
+        </p>
+   <a href="" data-id="{{ image.id }}" data-action="{% if request.user in user_like %} un{% endif %}like"
+       class="like">
+    {%  if request.user not in user_like %}LIKE{% else %}unlike{% endif %}
     </a>
     </div>
     {{ image.description|linebreaks }}
-    <div class="images">
+    <div class="media">
         {%  for user in image.user_like.all %}
         <div>
-            <img src="{{ user.profile.photo.url }}">
-            <p>{{ user }}</p>
+            <img  class="media-object" src="{{ user.profile.photo.url }}" style="width: 100px;height: 100px">
+            <p  class="media-body">{{ user }}</p>
         </div>
         {% empty %}
         Nobody likes this image yet

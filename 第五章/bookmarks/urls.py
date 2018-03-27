@@ -22,11 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/',include('account.urls',namespace='account')),
-<<<<<<< HEAD
-    path('social-auth/',include(django_app_urls,namespace='social')),
+    #path('social-auth/',include(django_app_urls,namespace='social')),
     path('images/',include('images.urls',namespace='images'))
-=======
->>>>>>> parent of 37a2aa2... Fourth
     #path('login/$',views.user_login,name='login')
 ]
 if settings.DEBUG:

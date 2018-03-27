@@ -5,9 +5,14 @@
     <meta charset="UTF-8">
     <title>{% block title %}Title{% endblock %}</title>
 <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
-<script src="{% static "js/bootstrap.js" %}"></script>
+<!--<script src="{% static "js/bootstrap.js" %}"></script>-->
+<script src="http://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js">
+</script>
+<script src=" http://cdn.jsdelivr.net/jquery.cookie/1.4.1/jquery.
+cookie.min.js "></script>
+
 <script>
-var csrftoken = $.cookie('csrftoken');
+var csrftoken = $.cookie("csrftoken");
   function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
@@ -28,19 +33,19 @@ $.ajaxSetup({
 <div id="header" class="container-fluid"  role="navigation">
     <span class="nav navbar-brand">Bookmarks</span>
     {% if request.user.is_authenticated %}
-      <ul class="nav navbar-nav">
+      <ul class="nav nav-tabs">
         <li {% if section|safe == "dashboard" %} class="active" {% endif %}>
         <a href="{% url "account:dashboard" %}">My dashboard</a>
         </li>
      <li {% if section|safe == "images" %}class="active"{% endif %}>
-        <a href="#">Images</a>
+        <a href="{% url "images:list" %}">Images</a>
       </li>
       <li {% if section|safe == "people" %}class="active"{% endif %}>
         <a href="#">People</a>
        </li>
-      </ul>
      {% endif %}
-     <span class="navbar-brand" >
+</ul>
+     <span>
        {% if request.user.is_authenticated %}
          Hello {{ request.user }},
          <a href="{% url "account:logout" %}">Logout</a>
@@ -48,6 +53,7 @@ $.ajaxSetup({
          <a href="{% url "account:login" %}">Log-in</a>
        {% endif %}
      </span>
+
 </div>
 <div id="content">
     {% block content %}

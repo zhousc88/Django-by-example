@@ -38,12 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
     'images',
     'sorl.thumbnail',
     #'social.apps.django_app.default',
-=======
->>>>>>> parent of 37a2aa2... Fourth
 ]
 
 MIDDLEWARE = [
