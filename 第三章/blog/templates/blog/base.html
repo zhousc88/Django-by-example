@@ -1,0 +1,36 @@
+{% load staticfiles %}
+{% load blog_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Title{% endblock %}</title>
+<link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+  <!-- Custom CSS: You can use this stylesheet to override any Bootstrap styles and/or apply your own styles -->
+    <link href="{%  static "css/bootstrap-theme.css" %}" rel="stylesheet">
+  <!-- Bootstrap Core JavaScript -->
+    <script src="{% static  "js/bootstrap.min.js" %}"></script>
+</head>
+<body>
+<div id="content" class="col-lg-8" >
+    {% block content %}
+    {% endblock %}
+</div>
+<div id="sidebar" class="col-lg-4">
+    <h2>MY blog</h2>
+    <p>this is zhosuc blog. I've written <b>{% total_posts %}</b> posts so far</p>
+<p><a href="{% url "blog:post_feed" %}">Subscribe to my RSS feed</a> </p>
+    <h3>Latest Posts</h3>
+    {% show_latest_posts 2 %}
+    <h2>Most commented posts</h2>
+
+    <ul>
+        {% for post in most_comments %}
+        <li>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>

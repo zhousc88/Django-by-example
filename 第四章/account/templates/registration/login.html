@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Log-in{% endblock %}
+{% block content %}
+<h1>Log-in</h1>
+{%  if form.errors %}
+<p>
+    Your name and password didn't match.
+    Please try again
+</p>
+{% elif user.is_authenticated %}
+    You are authenticated as <b>{{ user }}</b>, but are not authorized to
+    access this page. You can do something in this site
+    {% else %}
+<p>
+   Please, use the following form to log-in. If you don't have an account <a href="{% url "account:register" %}">register here</a>
+</p>
+
+<div class="login-form">
+    <form action="{% url 'account:login' %}" method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="hidden" name="next " value="{{ next }}">
+        <p><input type="submit" value="Log-in"></p>
+        <p><a href="{% url "account:password_reset" %}" > Forgootten your password </a></p>
+    </form>
+</div>
+    {% endif %}
+{% endblock %}

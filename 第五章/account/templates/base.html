@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Title{% endblock %}</title>
+<link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+<script src="{% static "js/bootstrap.js" %}"></script>
+<script>
+var csrftoken = $.cookie('csrftoken');
+  function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+  beforeSend: function(xhr, settings) {
+    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+  }
+}
+});
+    $(document).ready(function () {
+        {% block domready %}
+        {% endblock %}
+    });
+</script>
+</head>
+<body>
+<div id="header" class="container-fluid"  role="navigation">
+    <span class="nav navbar-brand">Bookmarks</span>
+    {% if request.user.is_authenticated %}
+      <ul class="nav navbar-nav">
+        <li {% if section|safe == "dashboard" %} class="active" {% endif %}>
+        <a href="{% url "account:dashboard" %}">My dashboard</a>
+        </li>
+     <li {% if section|safe == "images" %}class="active"{% endif %}>
+        <a href="#">Images</a>
+      </li>
+      <li {% if section|safe == "people" %}class="active"{% endif %}>
+        <a href="#">People</a>
+       </li>
+      </ul>
+     {% endif %}
+     <span class="navbar-brand" >
+       {% if request.user.is_authenticated %}
+         Hello {{ request.user }},
+         <a href="{% url "account:logout" %}">Logout</a>
+       {% else %}
+         <a href="{% url "account:login" %}">Log-in</a>
+       {% endif %}
+     </span>
+</div>
+<div id="content">
+    {% block content %}
+
+    {% endblock %}
+</div>
+</body>
+</html>
