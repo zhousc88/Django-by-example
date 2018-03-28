@@ -13,5 +13,11 @@ You can also<a href="{% url "account:edit" %}">edit your profile</a>
 or <a href="{% url "account:password_change" %}">change your password</a>.</p>
 
 <p>Welcome to your Dashboard</p>
+    <h2>What's happen</h2>
+    <div id="changelist">
+    {% for action in actions %}
+        {%  include "actions/action/detail.html" %}
+    {% endfor %}
+    </div>
 
 {% endblock %}

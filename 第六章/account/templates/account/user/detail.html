@@ -1,6 +1,32 @@
 {% extends "base.html" %}
 {% load thumbnail %}
 {% block title %} {{ users.username }}{% endblock %}
+{% block domready %}
+    $('a.follow').click(function(e){
+        e.preventDefault();
+        $.post('{% url "account:user_follow" %}',
+            {
+                id: $(this).data('id'),
+                action: $(this).data('action')
+            },
+            function(data){
+                if (data['status'] == 'ok')
+                {
+                    var previous_action = $('a.follow').data('action');
+
+                    // toggle data-action
+                    $('a.follow').data('action', previous_action == 'follow' ? 'unfollow' : 'follow');
+                    // toggle link text
+                    $('a.follow').text(previous_action == 'follow' ? 'Unfollow' : 'Follow');
+
+                    // update total likes
+                    var previous_followers = parseInt($('span.count .total').text());
+                    $('span.count .total').text(previous_action == 'follow' ? previous_followers + 1 : previous_followers - 1);
+                }
+        });
+
+    });
+{% endblock %}
 {% block content %}
     <h1>{{ users.username }}</h1>
     <div class="text-info">
@@ -8,14 +34,14 @@
         <img src="{{ im.url }}">
     {% endthumbnail %}
     </div>
-    {% with total_followers=user.followers.count %}
+    {% with total_followers=users.followers.count %}
     <span class="alert-info">
     <span>{{ total_followers }}</span>
     follower{{ total_followers|pluralize }}
     </span>
-    <a href="#" data-id="{{ user.id }}" data-action="{%  if request.user in user.followers.all %}un{% endif %}follow"
-class="button">
-    {%  if  request.user not in user.followers.all %}
+    <a href="" data-id="{{ users.id }}" data-action="{%  if request.user in users.followers.all %}un{% endif %}follow"
+class="follow">
+    {%  if  request.user not in users.followers.all %}
     Follow
     {% else %}
     Unfollow

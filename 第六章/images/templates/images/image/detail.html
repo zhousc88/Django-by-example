@@ -38,11 +38,12 @@
     <div class="col-sm-6 col-md-3">
         <p class="action-counter">
             <span>{{ total_likes }}</span>Like{{ total_likes|pluralize }}
-        </p>
+        </p><span class="total">{{ total_views }}</span>view{{ total_views|pluralize}}
+    <p>
    <a href="" data-id="{{ image.id }}" data-action="{% if request.user in user_like %} un{% endif %}like"
        class="like">
     {%  if request.user not in user_like %}LIKE{% else %}unlike{% endif %}
-    </a>
+    </a></p>
     </div>
     {{ image.description|linebreaks }}
     <div class="media">
