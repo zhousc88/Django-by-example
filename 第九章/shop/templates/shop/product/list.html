@@ -1,0 +1,34 @@
+{% extends "shop/base.html" %}
+{%  load i18n %}
+{% load static %}
+{% block title %}
+    {% if category %}{{ category.name }}{% else %}{% trans "Products" %}{% endif %}
+{% endblock %}
+{% block content %}
+    <div class="navbar">
+    <h3>{% trans "Categories" %}</h3>
+    <ul class="nav nav-pills nac-stacked">
+        <li {% if not category %} class="active" {% endif %}>
+        <a class="label label-default" href="{% url "shop:product_list" %}">{% trans "ALL" %}</a>
+        </li>
+    {% for c in categories %}
+        <li {% if category.slug == c.slug %} class="active"{% endif %}>
+        <a href="{{ c.get_absolute_url }}" class="label label-default" >{{ c.name }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+    </div>
+    <div class="list-group">
+    <h1>{%  if category %}{{ category.name }}{% else %}Product{% endif %}</h1>
+    {%  for product in products %}
+        <div class="list-group-item">
+        <a href="{{ product.get_absolute_url }}">
+            {%  if product.image %}<img src="{{ product.image.url }}"style="width: 200pt;height: 200pt">{% else %} {{ static }} {% endif  %}
+        </a>
+        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+        <p>${{ product.price }}</p>
+        </div>
+    {% endfor %}
+
+    </div>
+{% endblock %}
