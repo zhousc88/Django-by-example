@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'payment',
     'coupons',
-    'rosetta'
+    'rosetta', #翻译交互界面
+    'parler',#翻译模型
+    'locale',#第三方本地化验证
 ]
 
 MIDDLEWARE = [
@@ -115,8 +117,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
-    ('en-us',_('English')),
-    ('zh-Hans',_('Chinese')),
+    ('en',_('English')),
+    ('zh-hans', ('中文简体')),
 )
 
 TIME_ZONE = 'UTC'
@@ -144,3 +146,18 @@ PAYPAL_TEST = True
 LOCAL_PATH = (
     os.path.join(BASE_DIR,'locale/')
 )
+
+PARLER_LANGUAGES = {
+    None :(
+        {'code':'en',},
+        {'code':'zh-hans',},
+    ),
+    'default':{
+        'fallback':'en',
+        'hide_untranslated':False,
+    }
+}
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 1
